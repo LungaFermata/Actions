@@ -1,0 +1,94 @@
+%YAML 1.2 # lines which begin with % are directives, this one defines the yaml version of the document
+%TAG !yaml! tag:yaml.org,2002: # this one creates a tag, it is only nessicary to do this as a directive if it is using a global URI (universal resource identifier)
+
+--- # three dashes are the end of directives indicator, if no directives are provided this is implied
+
+name: learn-github-actions  # : indicates a mapping of a key: value pair, the space after the colon is mandatory
+
+run-name: ${{ github.actor }} is learning GitHub Actions # ${{ }} is what github uses to indicate a variable, this formating is not universal across applications
+
+on: 
+  - push # - indicates a sequence (list) of scalars or mappings
+  - deployment
+
+jobs:
+  check-bats-version: # indentation indicates a nested mapping
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install -g bats
+      - run: bats -v
+
+... # three dots are the end of document indicator, this is implied by the end of file or a new end of directives indicator, only nessicary if providing the following document directives
+%YAML 1.2
+--- # YAML allows for multiple documents in the same file, this funcionality isn't used for github actions
+
+# same workflow written using flow style collections
+{ # {} indicates mapings will follow
+name: learn-github-actions, # all entries must be concluded with a comma
+
+run-name: '${{ github.actor }} is learning GitHub Actions', # more strict on the need to quote lines with special characters
+
+on: [push, deployment], # [] indicates a sequence
+
+
+jobs: # this should be looking familiar
+  {
+  check-bats-version:
+    {
+    runs-on: ubuntu-latest, 
+    steps:
+      [
+      uses: actions/checkout@v5, 
+        {
+        uses: actions/setup-node@v4, 
+        with: 
+          {
+          node-version: '20'
+          }
+        }, 
+      run: npm install -g bats, 
+      run: bats -v 
+      ] 
+    }
+  },
+
+#compressed version of the flow style job collection, both function the same. Any whitespace left is critical for parsing
+jobs: {check-bats-version: {runs-on: ubuntu-latest,steps: [uses: actions/checkout@v5,{uses: actions/setup-node@v4,with: {node-version: '20'}},run: npm install -g bats,run: bats -v]}}
+
+} # end of the mapping
+
+---
+# Flow Scalar Styles, credit to https://www.yaml.info/learn/quote.html
+plain scalars:
+- a string with a \ backslash that doesn't need to be escaped
+- can also use " quotes ' and $ a % lot /&?+ of other {} [] stuff
+- a string
+  on multiple lines
+
+single quoted:
+- '& starts with a special character, needs quotes'
+- 'no need to escape backslash \ and double " quote'
+- 'to express one single quote, use '' two of them'
+
+double quoted:
+- "here we can use predefined escape sequences like \t \n \b"
+- "or generic escape sequences \x0b \u0041 \U00000041"
+- "the double quote \" needs to be escaped"
+- "just like the \\ backslash"
+- "the single quote ' and other characters must not be escaped"
+
+# Block Scalar Styles
+literal block scalar: |
+  a multiline text
+  line 2
+  line 3
+
+# mnemonic: '>' is a folded '|'
+folded block scalar: >
+  a long line split into
+  several short
+  lines for readability
