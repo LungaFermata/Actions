@@ -14,11 +14,11 @@ jobs:
         run: sudo apt-get install -y gcc
 
       - name: Compile C program
-        run: gcc -o my_program hello.c
+        run: gcc -o hello_world.exe hello.c
 
       - name: Run tests
         run: |
-          if ./my_program; then
+          if ./hello_world.exe; then
             echo "Test Passed"
           else
             echo "Test Failed"
@@ -28,6 +28,6 @@ jobs:
       - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
-            name: my_program
-            path: my_program
+            name: hello_world
+            path: hello_world.exe
             retention-days: 1
