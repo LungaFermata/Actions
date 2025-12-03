@@ -6,15 +6,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        compiler: [gcc, clang] 
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up GCC
-        run: sudo apt-get install -y gcc
+      - name: Set up compiler
+        run: sudo apt-get install -y ${{ matrix.compiler }}
 
       - name: Compile C program
-        run: gcc -o hello_world.exe hello.c
+        run: ${{ matrix.compiler }} -o hello_world.exe hello.c
 
       - name: Run tests
         run: |
