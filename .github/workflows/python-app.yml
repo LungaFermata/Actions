@@ -22,8 +22,10 @@ jobs:
       with:
         python-version: "3.10"
     
-    - name: Run python file # the context is placed inside quotes to prevent splitting when passed in through the command line
+    - name: Run python file 
       env:
-        name: ${{ inputs.name }}
+        name: ${{ inputs.name }}  # context stored as environmental variable to prevent script injection
+
+      # the context is placed inside quotes to prevent splitting when passed in through the command line
       run: |
         python3 hello.py "$name"
